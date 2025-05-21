@@ -1,184 +1,362 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>RequestForBike ❤️</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background: linear-gradient(to bottom, #ffe4ec, #ffd1f1);
-      font-family: 'Comic Sans MS', cursive, sans-serif;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      overflow: hidden;
-      position: relative;
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Birthday Surprise</title>
+<style>
+  body {
+    margin: 0; padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #000;
+    color: #fff;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    overflow: hidden;
+    text-align: center;
+  }
 
-    h1 {
-      font-size: 4rem;
-      color: #e60073;
-      text-shadow: 2px 2px #fff;
-      display: none;
-    }
+  #hearts {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: -1;
+  }
 
-    #message {
-      margin-top: 20px;
-      font-size: 2rem;
-      color: #c60055;
-      display: none;
-      animation: pop 1s ease;
-    }
+  .heart {
+    position: absolute;
+    font-size: 20px;
+    animation-name: floatUp;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    color: red;
+  }
 
-    button {
-      margin-top: 30px;
-      padding: 12px 25px;
-      background: #ff3399;
-      color: white;
-      border: none;
-      font-size: 1.2rem;
-      border-radius: 30px;
-      cursor: pointer;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-      transition: background 0.3s;
+  @keyframes floatUp {
+    0% {
+      transform: translateY(100vh) scale(0.5);
+      opacity: 0;
     }
+    50% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(-10vh) scale(1);
+      opacity: 0;
+    }
+  }
 
-    button:hover {
-      background: #cc0066;
-    }
+  input, button {
+    padding: 10px 15px;
+    margin: 10px;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: none;
+  }
 
-    .heart {
-      position: absolute;
-      width: 20px;
-      height: 20px;
-      background: red;
-      transform: rotate(45deg);
-      animation: float 6s linear infinite;
-      opacity: 0.6;
-    }
+  button {
+    cursor: pointer;
+    background: #ff3366;
+    color: white;
+    transition: background 0.3s;
+  }
+  button:hover {
+    background: #ff6699;
+  }
 
-    .heart::before,
-    .heart::after {
-      content: '';
-      position: absolute;
-      width: 20px;
-      height: 20px;
-      background: red;
-      border-radius: 50%;
-    }
+  input[type="date"] {
+    padding: 10px;
+  }
 
-    .heart::before {
-      top: -10px;
-      left: 0;
-    }
+  .hidden {
+    display: none;
+  }
 
-    .heart::after {
-      left: -10px;
-      top: 0;
-    }
+  /* Rocket animation */
+  .rocket {
+    width: 100px;
+    height: 140px;
+    margin: 20px auto;
+    background: url('https://cdn-icons-png.flaticon.com/512/469/469772.png') no-repeat center/contain;
+    animation: flyUp 4s ease-out forwards;
+    filter: drop-shadow(0 0 8px orangered);
+  }
 
-    @keyframes float {
-      0% {
-        transform: translateY(100vh) rotate(45deg);
-        opacity: 1;
-      }
-      100% {
-        transform: translateY(-100vh) rotate(45deg);
-        opacity: 0;
-      }
+  @keyframes flyUp {
+    0% {
+      transform: translateY(0);
+      opacity: 1;
+      filter: drop-shadow(0 0 8px orangered);
     }
+    70% {
+      filter: drop-shadow(0 0 25px orange);
+    }
+    100% {
+      transform: translateY(-650px);
+      opacity: 0;
+      filter: drop-shadow(0 0 40px gold);
+    }
+  }
 
-    @keyframes pop {
-      0% { transform: scale(0.5); opacity: 0; }
-      100% { transform: scale(1); opacity: 1; }
-    }
+  #photo {
+    width: 180px;
+    height: 180px;
+    border-radius: 20px;
+    object-fit: cover;
+    border: 4px solid pink;
+    box-shadow: 0 0 20px pink;
+    margin: 15px auto;
+  }
 
-    .emoji {
-      font-size: 3rem;
-      animation: bounce 1s infinite alternate;
-    }
+  .msg {
+    font-size: 1.3rem;
+    margin-top: 10px;
+    color: #ff99cc;
+  }
 
-    @keyframes bounce {
-      from { transform: translateY(0); }
-      to { transform: translateY(-10px); }
-    }
+  /* Fullscreen fireworks container */
+  #fireworks {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 10;
+    background: transparent;
+    overflow: visible;
+  }
 
-    .cartoon {
-      position: absolute;
-      bottom: 10px;
-      right: 10px;
-      width: 120px;
-      height: auto;
-      z-index: 0;
-      opacity: 0.9;
-    }
+  /* Firework particle enhanced */
+  .firework {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    box-shadow:
+      0 0 15px currentColor,
+      0 0 30px currentColor,
+      0 0 45px currentColor;
+    animation: explode 1.2s ease forwards;
+    opacity: 0;
+    filter: drop-shadow(0 0 6px currentColor);
+  }
 
-    /* Love Quote Style */
-    .quote {
-      position: absolute;
-      top: 40%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 2rem;
-      font-family: 'Brush Script MT', cursive;
-      color: rgba(230, 0, 115, 0.2);
-      text-align: center;
-      max-width: 80%;
-      z-index: 0;
+  @keyframes explode {
+    0% {
+      opacity: 1;
+      transform: scale(1) translate(0, 0);
     }
-  </style>
+    100% {
+      opacity: 0;
+      transform: scale(0.3) translate(var(--x), var(--y));
+    }
+  }
+
+  /* Slideshow container */
+  #slideshow-container {
+    width: 200px;
+    height: 200px;
+    border-radius: 20px;
+    overflow: hidden;
+    border: 4px solid pink;
+    box-shadow: 0 0 20px pink;
+    margin: 20px auto;
+  }
+  #slideshow-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 20px;
+  }
+</style>
 </head>
 <body>
 
-  <div class="quote">
-    “Support,<br>Manager.”
+<div id="hearts"></div>
+
+<!-- Step 1: Name input -->
+<div id="step1">
+  <p>Surprise for you. Open it:</p>
+  <input id="nameInput" placeholder="Enter your name" autocomplete="off" />
+  <button onclick="checkName()">Open</button>
+</div>
+
+<!-- Step 2: Date input -->
+<div id="step2" class="hidden">
+  <p>Enter your birth date:</p>
+  <input type="date" id="dob" />
+  <button onclick="checkDate()">Next</button>
+</div>
+
+<!-- Step 3: Miss me? -->
+<div id="step3" class="hidden">
+  <p>Do you miss me?</p>
+  <button onclick="answerYes()">Yes</button>
+  <button onclick="answerNo()">No</button>
+</div>
+
+<!-- Step 4: Photo Slideshow -->
+<div id="step4" class="hidden">
+  <p>Some memories for you...</p>
+  <div id="slideshow-container">
+    <img id="slideshow-image" src="" alt="Slideshow Image" />
   </div>
+</div>
 
-  <h1 id="text1">Hi Abhi <span class="emoji">😊</span></h1>
-  <h1 id="text2">ତମ ପାଇଁ କିଛି ଅଛି? <span class="emoji">😍</span></h1>
-  <h1 id="text3">ଞ?? <span class="emoji">😘</span></h1>
-  <div id="message">
-    ସହିଦ୍ ନଗର୍ ଜିବା? ❤️<br><br>
-    <button onclick="alert('He said Yes! 😍💖')">Yes 💌</button>
-  </div>
+<!-- Step 5: Birthday Wish -->
+<div id="step5" class="hidden">
+  <audio id="birthdaySong" src="https://www.bensound.com/bensound-music/bensound-tenderness.mp3" loop></audio>
 
-  <button id="nextBtn">Click me 😀</button>
+  <h1>🎉 Happy Birthday Soona 🎉</h1>
+  <div class="rocket"></div>
+  <div id="fireworks"></div>
+  <img id="photo" src="https://www.dropbox.com/scl/fi/1og5mr7e0s0cbr11ba89q/WhatsApp-Image-2025-05-21-at-1.55.56-PM.jpeg?rlkey=agxrauvo8f5v5xni6r31ixdal&st=jdbry4fs&raw=1" alt="Soona" />
+  <p class="msg">
+    Wishing you all the love, laughter, and happiness in the world! 💖<br/>
+    You are truly special. Have the best birthday ever! Happy Birthday Soona! Door hain par dil hamesha paas hai 🥳🎂🎈
+  </p>
+</div>
 
-  <img src="https://media.tenor.com/ZnRzNPxERawAAAAi/cute-love.gif" alt="cartoon couple" class="cartoon">
+<script>
+  // Flying hearts creation
+  setInterval(() => {
+    const heart = document.createElement('div');
+    heart.className = 'heart';
+    heart.innerHTML = '❤️';
+    heart.style.left = Math.random() * 100 + 'vw';
+    heart.style.animationDuration = (3 + Math.random() * 3) + 's';
+    heart.style.fontSize = (15 + Math.random() * 15) + 'px';
+    document.getElementById('hearts').appendChild(heart);
+    setTimeout(() => heart.remove(), 6000);
+  }, 300);
 
-  <script>
-    let step = 0;
-    const btn = document.getElementById('nextBtn');
-
-    btn.addEventListener('click', () => {
-      step++;
-      if (step === 1) {
-        document.getElementById('text1').style.display = 'block';
-      } else if (step === 2) {
-        document.getElementById('text2').style.display = 'block';
-      } else if (step === 3) {
-        document.getElementById('text3').style.display = 'block';
-        btn.style.display = 'none';
-        setTimeout(() => {
-          document.getElementById('message').style.display = 'block';
-        }, 1000);
-      }
-    });
-
-    // Heart animation
-    function createHeart() {
-      const heart = document.createElement('div');
-      heart.className = 'heart';
-      heart.style.left = Math.random() * 100 + 'vw';
-      heart.style.animationDuration = (Math.random() * 2 + 4) + 's';
-      document.body.appendChild(heart);
-      setTimeout(() => heart.remove(), 6000);
+  // Step 1: Check Name
+  function checkName() {
+    const name = document.getElementById('nameInput').value.trim().toLowerCase();
+    if (name === 'soona') {
+      document.getElementById('step1').classList.add('hidden');
+      document.getElementById('step2').classList.remove('hidden');
+    } else {
+      alert("Sorry! It's a surprise only for My Bhayri.");
     }
+  }
 
-    setInterval(createHeart, 300);
-  </script>
+  // Step 2: Check date = 22 May
+  function checkDate() {
+    const dob = document.getElementById('dob').value;
+    if (!dob) {
+      alert('Please enter your birth date.');
+      return;
+    }
+    const date = new Date(dob);
+    if (date.getDate() === 22 && (date.getMonth() + 1) === 5) {
+      document.getElementById('step2').classList.add('hidden');
+      document.getElementById('step3').classList.remove('hidden');
+    } else {
+      alert('❌ Wrong date! Surprise is only for 22 May 🎁');
+    }
+  }
+
+  // Step 3: Miss me?
+  function answerYes() {
+    document.getElementById('step3').classList.add('hidden');
+    startSlideshowStep4();
+  }
+
+  function answerNo() {
+    alert('Think again 😢...');
+  }
+
+  // Step 4: Slideshow images (updated with your Dropbox links)
+  const slideshowImages = [
+    "https://www.dropbox.com/scl/fi/1fddgcsxk5559q4re75yu/photo-1.jpg?rlkey=nssnjo8woenv332hyxt1e68cn&st=93ditiu3&raw=1",
+    "https://www.dropbox.com/scl/fi/2pmuhjc5x8ldoxs6cjsyr/soona-photo-2.png?rlkey=xntnr6cx4ikopup3a8l3dgv70&st=l65mrybz&raw=1",
+    "https://www.dropbox.com/scl/fi/qalavilrnds6sebvbgy08/photo-3.jpeg?rlkey=ja2uina4x2u9ezco80qx3pxmu&st=ycqenmzg&raw=1",
+    "https://www.dropbox.com/scl/fi/i7s1yo9tmobago4dhbiza/photo4.jpg?rlkey=9uuqnp6d9ql2lq1dhzsr80s62&st=1hbk1u5m&raw=1"
+  ];
+
+  let currentSlideIndex = 0;
+  let slideshowInterval;
+
+  function startSlideshowStep4() {
+    document.getElementById('step4').classList.remove('hidden');
+    const imgEl = document.getElementById('slideshow-image');
+    imgEl.src = slideshowImages[0];
+    currentSlideIndex = 0;
+
+    slideshowInterval = setInterval(() => {
+      currentSlideIndex++;
+      if (currentSlideIndex >= slideshowImages.length) {
+        clearInterval(slideshowInterval);
+        // Move to step 5 after slideshow ends
+        document.getElementById('step4').classList.add('hidden');
+        showStep5();
+        return;
+      }
+      imgEl.src = slideshowImages[currentSlideIndex];
+    }, 5000); // 5 seconds per image
+  }
+
+  // Step 5: Show birthday wish with fireworks and play song
+  function showStep5() {
+    document.getElementById('step5').classList.remove('hidden');
+    startFireworks();
+
+    const song = document.getElementById('birthdaySong');
+    song.play().catch(() => {
+      console.log('Autoplay failed; user interaction needed.');
+    });
+  }
+
+  // Fireworks colors array
+  const colors = ['gold', 'orangered', 'white', 'orange', 'yellow'];
+
+  // Fireworks animation function
+  function createFirework() {
+    const fireworks = document.getElementById('fireworks');
+    const numParticles = 30;
+
+    for(let i=0; i<numParticles; i++) {
+      const particle = document.createElement('div');
+      particle.classList.add('firework');
+
+      // Random color from colors array
+      const color = colors[Math.floor(Math.random() * colors.length)];
+      particle.style.color = color;
+
+      // Random direction and distance
+      const angle = Math.random() * 2 * Math.PI;
+      const distance = 60 + Math.random() * 140;
+      const x = Math.cos(angle) * distance + 'px';
+      const y = Math.sin(angle) * distance + 'px';
+      particle.style.setProperty('--x', x);
+      particle.style.setProperty('--y', y);
+
+      // Random position near center with small spread
+      particle.style.top = (window.innerHeight / 2 + (Math.random() * 120 - 60)) + 'px';
+      particle.style.left = (window.innerWidth / 2 + (Math.random() * 120 - 60)) + 'px';
+
+      fireworks.appendChild(particle);
+
+      particle.addEventListener('animationend', () => {
+        particle.remove();
+      });
+    }
+  }
+
+  let fireworkInterval;
+  function startFireworks() {
+    fireworkInterval = setInterval(createFirework, 700);
+  }
+  function stopFireworks() {
+    clearInterval(fireworkInterval);
+  }
+</script>
+
 </body>
 </html>
